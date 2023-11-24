@@ -12,11 +12,13 @@ const getAllTasks = (req, res) => {
 };
 
 const getTaskById = (req, res) => {
-  console.log('params',req.params);
-  const taskNumber = req.params.id;
-  console.log('taskNumber',taskNumber);
+  // console.log('params',req.params);
+  const taskDetails = req.body;
+  const estimateHours = req.body.estimateHours;
+  const estimateNotes = req.body.estimateNotes;
+  // console.log('taskNumber',taskDetails);
   try {
-    Task.getTaskById(taskNumber, (task) => {
+    Task.getTaskById(taskDetails, (task) => {
       if (task) {
         res.json(task);
       } else {
@@ -52,12 +54,12 @@ const createTask = (req, res) => {
 
 
 const updateTask = (req, res) => {
-  const taskData = req.body;
+  const { actualHours, notes, estimateHours, estimateNotes } = req.body;
   const taskId = req.params.id;
-  console.log('taskData line 61',{...taskData,completed:1});
-  console.log('taskId line 62',taskId);
+  console.log('taskData line 61', { actualHours: actualHours, notes: notes, completed: 1 });
+  console.log('taskId line 62', taskId);
   try {
-    Task.updateTask(taskId, {...taskData,completed:1}, () => {
+    Task.updateTask(taskId, estimateHours, estimateNotes, { actualHours: actualHours, notes: notes, completed: 1 }, () => {
       res.json({ message: 'Task updated successfully' });
     });
   } catch (err) {
@@ -66,7 +68,7 @@ const updateTask = (req, res) => {
   }
 };
 
-const entryForSameTask = (req,res) => {
+const entryForSameTask = (req, res) => {
   const taskNumber = req.body;
   console.log(taskNumber);
   try {

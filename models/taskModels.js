@@ -6,7 +6,7 @@ const createTasksTable = () => {
       CREATE TABLE IF NOT EXISTS tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         taskNumber VARCHAR(255),
-        estimateHours FLOAT,
+        estimateHours VARCHAR(50),
         estimateNotes TEXT,
         actualHours FLOAT,
         notes TEXT,
@@ -28,27 +28,29 @@ createTasksTable();
 const getAllTasks = (callback) => {
   try {
     const query = 'SELECT * FROM tasks';
-    // const query = 'SELECT COUNT(*), taskNumber, group_concat(estimateHours) as estimateHours, group_concat(estimateNotes) as estimateNotes FROM tasks GROUP BY taskNumber; ';
+    // const query = 'SELECT COUNT(*), taskNumber, group_concat(estimateHours) as estimateHours, group_concat(estimateNotes) as estimateNotes, group_concat(completed) as completed FROM tasks GROUP BY taskNumber; ';
     db.query(query, (err, results) => {
       if (err) throw err;
       callback(results);
     });
   } catch (err) {
     console.error('Error getting all tasks:', err);
-    throw err; 
+    throw err;
   }
 };
 
-const getTaskById = (taskNumber, callback) => {
+const getTaskById = (taskDetails, callback) => {
+  const { taskNumber, estimateHours, estimateNotes } = taskDetails;
+  console.log(taskNumber, estimateHours, estimateNotes);
   try {
-    const query = 'SELECT * FROM tasks WHERE taskNumber = ? ';
-    db.query(query, [taskNumber], (err, results) => {
+    const query = `SELECT * FROM tasks WHERE taskNumber = '${taskNumber}' AND estimateHours = ${estimateHours} AND estimateNotes = '${estimateNotes}'`;
+    db.query(query, (err, results) => {
       if (err) throw err;
       callback(results[0]);
     });
   } catch (err) {
     console.error('Error getting task by ID:', err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -61,16 +63,16 @@ const createTask = (taskData, callback) => {
     });
   } catch (err) {
     console.error('Error creating task:', err);
-    throw err; 
+    throw err;
   }
 };
 
-const updateTask = (taskId, taskData, callback) => {
-  console.log('taskId, taskData',taskId, taskData);
+const updateTask = (taskId, estimateHours, estimateNotes, taskData, callback) => {
+  console.log('taskId, taskData', taskId, taskData);
   try {
     // const query = 'UPDATE tasks SET ? WHERE id = ?';
-    const query = 'UPDATE tasks SET ? WHERE taskNumber = ?';
-    db.query(query, [taskData, taskId], (err) => {
+    const query = 'UPDATE tasks SET ? WHERE taskNumber = ? AND estimateHours = ? AND estimateNotes = ?';
+    db.query(query, [taskData, taskId, estimateHours, estimateNotes], (err) => {
       if (err) throw err;
       callback();
     });
@@ -85,7 +87,7 @@ const getTaskByNumber = (taskNumber, callback) => {
     const query = 'SELECT * FROM tasks WHERE taskNumber = ?';
     db.query(query, [taskNumber], (err, results) => {
       if (err) throw err;
-      callback(results[0]); 
+      callback(results[0]);
     });
   } catch (err) {
     console.error('Error getting task by TaskNumber:', err);
