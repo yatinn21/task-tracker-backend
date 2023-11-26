@@ -22,5 +22,18 @@ This project is a Task Tracker Application with a Node.js backend and MySQL data
 - `GET /api/tasks/getAllTasks`: Get all tasks
 - `GET /api/tasks/getTaskById/:id`: Get task by ID
 - `POST /api/tasks/createTask`: Create a new task
-- `PUT /api/tasks/updateTask/:id`: Update task by ID
+- `POST /api/tasks/updateTask/:id`: Update task by ID
+- `POST /api/tasks/entryForSameTask`: Another entry for same taskNumber
 
+## SQL Query for creating Task table
+
+CREATE TABLE IF NOT EXISTS tasks (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          taskNumber VARCHAR(255),
+          estimateHours VARCHAR(50),
+          estimateNotes TEXT,
+          actualHours FLOAT,
+          notes TEXT,
+          completed BOOLEAN DEFAULT false,
+          createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
