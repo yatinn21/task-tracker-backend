@@ -27,13 +27,4 @@ This project is a Task Tracker Application with a Node.js backend and MySQL data
 
 ## SQL Query for creating Task table
 
-CREATE TABLE IF NOT EXISTS tasks (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          taskNumber VARCHAR(255),
-          estimateHours VARCHAR(50),
-          estimateNotes TEXT,
-          actualHours FLOAT,
-          notes TEXT,
-          completed BOOLEAN DEFAULT false,
-          createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
+For this, please refer the folder: sqlQueries > query.txt

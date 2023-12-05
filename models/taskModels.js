@@ -27,7 +27,7 @@ createTasksTable();
 
 const getAllTasks = (callback) => {
   try {
-    const query = 'SELECT * FROM tasks';
+    const query = 'SELECT * FROM tasks ORDER BY id DESC';
     // const query = 'SELECT COUNT(*), taskNumber, group_concat(estimateHours) as estimateHours, group_concat(estimateNotes) as estimateNotes, group_concat(completed) as completed FROM tasks GROUP BY taskNumber; ';
     db.query(query, (err, results) => {
       if (err) throw err;
